@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Zendesk enhancement</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Zendesk enhancement</h1>
+    </header>
+
+    <!-- Filled in by popup.js from window.ZDE_CATALOG. -->
+    <ul id="modules"></ul>
+
+    <footer>
+      <p id="status">…</p>
+    </footer>
+
+    <!-- MV3 forbids inline script, so both halves are files. The catalog has to
+         load first: popup.js reads window.ZDE_CATALOG on its first line. -->
+    <script src="../core/catalog.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

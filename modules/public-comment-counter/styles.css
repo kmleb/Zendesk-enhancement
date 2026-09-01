@@ -1,0 +1,164 @@
+/* The tally widget: a narrow strip docked flush against the left or right
+   edge of the viewport, so it never covers the middle of the agent UI.
+
+   Everything is scoped under [data-zde-comment-counter] so nothing leaks
+   into the agent UI.
+
+   Properties are set explicitly rather than inherited: this markup is dropped
+   into someone else's page, and Zendesk's own resets style bare elements —
+   `button` in particular. Attribute selectors outrank those element selectors,
+   so no !important is needed. */
+
+[data-zde-comment-counter] {
+  position: fixed;
+  right: 0;
+  bottom: 120px;
+  z-index: 2147483000; /* under nothing but browser UI; Zendesk modals sit high */
+
+  box-sizing: border-box;
+  width: 48px;
+  padding: 6px;
+  border: 1px solid rgba(127, 127, 127, 0.35);
+  border-right: 0; /* flush against the edge it's docked to */
+  border-radius: 6px 0 0 6px; /* rounded only on the inward-facing side */
+
+  background: #fff;
+  color: #2f3941; /* Zendesk Garden's default text grey */
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
+
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+
+  cursor: grab;
+  user-select: none;
+}
+
+[data-zde-comment-counter] * {
+  box-sizing: border-box;
+}
+
+/* --- docking -------------------------------------------------------------- */
+
+[data-zde-cc-dock="left"] {
+  left: 0;
+  right: auto;
+  border-left: 0;
+  border-right: 1px solid rgba(127, 127, 127, 0.35);
+  border-radius: 0 6px 6px 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+}
+
+/* While actively dragged the widget floats free of either edge, so it reads
+   as "picked up" rather than docked until it's dropped and re-snapped. */
+[data-zde-cc-dragging] {
+  cursor: grabbing;
+  border: 1px solid rgba(127, 127, 127, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* --- count ---------------------------------------------------------------- */
+/* Yesterday's count lives in this element's title tooltip rather than on the
+   page, to keep the strip as short as it is narrow. */
+
+[data-zde-cc-count] {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  cursor: help;
+}
+
+/* Live "time since last +1" readout. Empty (no +1 yet this tab) collapses to
+   nothing rather than reserving blank space. */
+[data-zde-cc-since] {
+  font-size: 9px;
+  line-height: 1.2;
+  color: rgba(127, 127, 127, 0.95);
+  font-variant-numeric: tabular-nums;
+}
+
+[data-zde-cc-since]:empty {
+  display: none;
+}
+
+/* --- buttons ---------------------------------------------------------------- */
+
+[data-zde-cc-actions] {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+[data-zde-comment-counter] button {
+  width: 100%;
+  padding: 4px 0;
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  border-radius: 4px;
+
+  background: transparent;
+  color: inherit;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  cursor: pointer;
+}
+
+[data-zde-comment-counter] button:hover:not(:disabled) {
+  background: rgba(127, 127, 127, 0.12);
+}
+
+[data-zde-comment-counter] button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Every per-button rule is prefixed with the root attribute: the shared rule
+   above is `[…] button`, so a bare `[data-zde-cc-plus]` would lose to it. */
+
+/* +1 is the one button that gets used all day, so it is the only filled one. */
+[data-zde-comment-counter] [data-zde-cc-plus] {
+  border-color: #1f73b7;
+  background: #1f73b7;
+  color: #fff;
+}
+
+[data-zde-comment-counter] [data-zde-cc-plus]:hover:not(:disabled) {
+  background: #144a75;
+}
+
+/* --- dark ---------------------------------------------------------------- */
+/* Set by content.js from the page's own background, not by prefers-color-scheme:
+   Zendesk's theme is a Zendesk setting, so an agent on a light Zendesk under a
+   dark OS would otherwise get a black card in the corner of a white page. */
+
+[data-zde-cc-dark] {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #1b1d1f;
+  color: #e9ebed;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-zde-cc-dark][data-zde-cc-dock="left"] {
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-zde-cc-dark] [data-zde-cc-since] {
+  color: rgba(190, 195, 200, 0.95);
+}
+
+[data-zde-cc-dark] [data-zde-cc-plus] {
+  border-color: #337fbd;
+  background: #337fbd;
+  color: #fff;
+}
+
+[data-zde-cc-dark] [data-zde-cc-plus]:hover:not(:disabled) {
+  background: #5293c7;
+}

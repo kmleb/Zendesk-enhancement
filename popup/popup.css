@@ -1,0 +1,141 @@
+/* Popup chrome only — nothing here is injected into a Zendesk page, so the
+   data-zde- prefix convention that applies to the modules doesn't apply here. */
+
+:root {
+  --bg: #fff;
+  --fg: #1f2733;
+  --muted: #68737d;
+  --line: #e9ebed;
+  --accent: #1f73b7;
+  --track: #d8dcde;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f2733;
+    --fg: #f8f9f9;
+    --muted: #a8b3bd;
+    --line: #34404d;
+    --accent: #5293c7;
+    --track: #49545c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+h1 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li + li {
+  border-top: 1px solid var(--line);
+}
+
+/* The whole row is the label, so clicking anywhere on it flips the switch. */
+.module {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  cursor: pointer;
+}
+
+.module:hover {
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.description {
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+/* Checkbox styled as a switch: the input stays the real control (focusable,
+   keyboard-operable), it's just visually replaced by the track and knob. */
+.switch {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 18px;
+  margin: 1px 0 0;
+  appearance: none;
+  border-radius: 9px;
+  background: var(--track);
+  transition: background 120ms ease;
+  cursor: pointer;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 120ms ease;
+}
+
+.switch:checked {
+  background: var(--accent);
+}
+
+.switch:checked::after {
+  transform: translateX(14px);
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.switch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+footer {
+  padding: 9px 14px;
+  border-top: 1px solid var(--line);
+}
+
+#status {
+  margin: 0;
+  color: var(--muted);
+}
+
+#status[data-error] {
+  color: #cc3340;
+}

@@ -1,0 +1,18 @@
+/* Purely an affordance: the whole ticket row acts as a button, so it should
+   look like one. Scoped to [data-zde-ticket-row], which this module's
+   content.js only sets on rows it has resolved a ticket id for, so nothing
+   leaks into the rest of Zendesk.
+
+   Kept deliberately subtle — Zendesk already has its own row hover state and
+   this needs to sit on top of it, in light and dark theme alike, without
+   fighting it. */
+
+[data-zde-ticket-row] {
+  cursor: pointer;
+}
+
+[data-zde-ticket-row]:hover {
+  /* Neutral grey at low alpha reads as a slight lift on a light theme and a
+     slight glow on a dark one, without assuming either. */
+  background-color: rgba(127, 127, 127, 0.08);
+}

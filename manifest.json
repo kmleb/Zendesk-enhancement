@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Zendesk enhancement",
+  "version": "1.3.0",
+  "description": "A set of enhancement modules for the Zendesk agent UI.",
+  "permissions": ["tabGroups", "storage"],
+  "host_permissions": ["https://*.zendesk.com/*"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Zendesk enhancement"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.zendesk.com/agent/*"],
+      "js": [
+        "core/catalog.js",
+        "core/registry.js",
+        "modules/open-in-tab-group/content.js",
+        "modules/public-comment-counter/content.js",
+        "core/boot.js"
+      ],
+      "css": [
+        "modules/open-in-tab-group/styles.css",
+        "modules/public-comment-counter/styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
